@@ -48,7 +48,9 @@ object RecFun extends RecFunInterface {
       else false
 
       //This statement prevents overstepping one location in memory
-      calculateCounter(chars.tail, decidingCounter)
+      if(chars.tail.isEmpty == false) {
+        calculateCounter(chars.tail, decidingCounter)
+      }
     }
     calculateCounter(chars, 0)
   }
