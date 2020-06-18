@@ -24,16 +24,21 @@ object RecFun extends RecFunInterface {
       else pascal(c, r-1) + pascal(c-1, r-1)
   //-----------------------------------------------------------------------------------------
   /** Exercise 2 */
-  def balance(chars: List[Char]): Boolean =
+  def balance(chars: List[Char]): Boolean = {
     //Leetcode similarity. Use a stack.
     var checkStack = Stack[Char]()
 
-    for(characters <- chars)
-      if(characters == '(') checkStack.push(characters)
-      else if(characters == ')') checkStack.pop(characters)
+    for (characters <- chars)
+      if (characters == '(') {
+        checkStack.push(characters)
+      }
+      else if (characters == ')') {
+        checkStack.pop
+      }
 
-    if(checkStack.isEmpty) true
+    if (checkStack.isEmpty) true
     else false
+  }
   //-----------------------------------------------------------------------------------------
   /** Exercise 3 */
   def countChange(money: Int, coins: List[Int]): Int = {
