@@ -26,17 +26,22 @@ object RecFun extends RecFunInterface {
   /** Exercise 2 */
   def balance(chars: List[Char]): Boolean = {
     //Leetcode similarity. Use a stack.
-    var checkStack = Stack[Char]()
+    checkStack = Stack[Char]()
 
-    for (characters <- chars)
-      if (characters == '(') {
-        checkStack.push(characters)
-      }
-      else if (characters == ')') {
-        checkStack.pop
-      }
+    def iterStack(checkStack: Stack[Char]): Stack[Char] = {
+      for (characters <- chars)
+        if (characters == '(') {
+          checkStack.push(characters)
+        }
+        else if (characters == ')') {
+          checkStack.pop
+        }
 
-    if (checkStack.isEmpty) true
+      iterStack(checkStack)
+    }
+
+    var resultStack = iterStack(checkStack)
+    if (resultStack.isEmpty) true
     else false
   }
   //-----------------------------------------------------------------------------------------
