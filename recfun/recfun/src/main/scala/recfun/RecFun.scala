@@ -1,4 +1,5 @@
 package recfun
+import scala.annotation.tailrec
 import scala.collection.mutable.Stack
 
 object RecFun extends RecFunInterface {
@@ -29,11 +30,13 @@ object RecFun extends RecFunInterface {
     //So everything has to be defined in the parameter..
 
     //Defining recursive helper method
+    @tailrec
     def calculateCounter(chars: List[Char], decidingCounter: Int): Boolean = {
       if(chars.isEmpty == true && decidingCounter == 0) true
       else if (chars.isEmpty == true && decidingCounter != 0) false
       else {
         //So in recursion, esp with lists, iterate via HEAD and TAIL
+          //By having a counter and no nonnegative check, you will fail edge case )))(((
         if (chars.head == '(') {
           decidingCounter + 1
         }
@@ -44,14 +47,9 @@ object RecFun extends RecFunInterface {
       }
 
       //This statement prevents overstepping one location in memory
-      var listCheck = chars.tail
-      if(listCheck.isEmpty == false) {
-        calculateCounter(chars.tail, decidingCounter)
-      }
+      calculateCounter(chars.tail, decidingCounter)
     }
-
-    if (calculateCounter(chars, 0) == true) true
-    else false
+    calculateCounter(chars, 0)
   }
   //-----------------------------------------------------------------------------------------
   /** Exercise 3 */
