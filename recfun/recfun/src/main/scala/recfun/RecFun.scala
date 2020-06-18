@@ -25,23 +25,28 @@ object RecFun extends RecFunInterface {
   //-----------------------------------------------------------------------------------------
   /** Exercise 2 */
   def balance(chars: List[Char]): Boolean = {
-    //Leetcode similarity. Use a stack.
-    checkStack = Stack[Char]()
+    //YOU CANNOT have mutable local variables in Scala
+    //So everything has to be defined in the parameter..
 
-    def iterStack(checkStack: Stack[Char]): Stack[Char] = {
-      for (characters <- chars)
-        if (characters == '(') {
-          checkStack.push(characters)
-        }
-        else if (characters == ')') {
-          checkStack.pop
+    //Defining recursive helper method
+    def calculateCounter(chars: List[Char], decidingCounter: Int): Boolean = {
+      if(chars.isEmpty == true && decidingCounter == 0) true
+      else if (chars.isEmpty == true && decidingCounter != 0) false
+      else {
+        //So in recursion, esp with lists, iterate via HEAD and TAIL
+        if (chars.head == '(') {
+          decidingCounter + 1
         }
 
-      iterStack(checkStack)
+        else if (chars.head == ')') {
+          decidingCounter - 1
+        }
+      }
+
+      calculateCounter(chars.tail, decidingCounter)
     }
 
-    var resultStack = iterStack(checkStack)
-    if (resultStack.isEmpty) true
+    if (calculateCounter(chars, 0) == true) true
     else false
   }
   //-----------------------------------------------------------------------------------------
