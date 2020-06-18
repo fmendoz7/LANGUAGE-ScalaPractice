@@ -34,7 +34,7 @@ object RecFun extends RecFunInterface {
     def calculateCounter(chars: List[Char], decidingCounter: Int): Boolean = {
       if(chars.isEmpty == true && decidingCounter == 0) true
       else if (chars.isEmpty == true && decidingCounter != 0) false
-      else {
+      else if (chars.isEmpty != true && decidingCounter >= 0) {
         //So in recursion, esp with lists, iterate via HEAD and TAIL
           //By having a counter and no nonnegative check, you will fail edge case )))(((
         if (chars.head == '(') {
@@ -45,6 +45,7 @@ object RecFun extends RecFunInterface {
           decidingCounter - 1
         }
       }
+      else false
 
       //This statement prevents overstepping one location in memory
       calculateCounter(chars.tail, decidingCounter)
