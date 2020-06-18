@@ -1,4 +1,5 @@
 package recfun
+import scala.collection.mutable.Stack
 
 object RecFun extends RecFunInterface {
 
@@ -28,8 +29,16 @@ object RecFun extends RecFunInterface {
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean =
     //Leetcode similarity. Use a stack.
+    var checkStack = Stack[Char]()
+
+    for(characters <- chars)
+      if(characters == '(') checkStack.push(characters)
+      else if(characters == ')') checkStack.pop(characters)
+
+    if(checkStack.isEmpty) true
+    else false
 
   /**
    * Exercise 3
