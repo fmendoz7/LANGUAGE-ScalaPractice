@@ -43,7 +43,11 @@ object RecFun extends RecFunInterface {
         }
       }
 
-      calculateCounter(chars.tail, decidingCounter)
+      //This statement prevents overstepping one location in memory
+      var listCheck = chars.tail
+      if(listCheck.isEmpty == false) {
+        calculateCounter(chars.tail, decidingCounter)
+      }
     }
 
     if (calculateCounter(chars, 0) == true) true
