@@ -38,10 +38,12 @@ class Rational(x: Int, y: Int) {
     )
 
   //Neg Method
-  def neg(that: Rational) = new Rational(-numer, denom)
+    //(!!!) IMPORTANT: If using symbols for method names, ONE SPACE between that and colon
+    //(!!!) unary_ allows a symbolic infix method name rep to go first
+  def unary_- : Rational = new Rational(-numer, denom)
 
   //Sub Method
-  def - (that: Rational) = this + neg(that)
+  def - (that: Rational) = this + -that
 
   override def toString = {
     //Important to normalize so you *DO NOT* run into arithmetic overflows
