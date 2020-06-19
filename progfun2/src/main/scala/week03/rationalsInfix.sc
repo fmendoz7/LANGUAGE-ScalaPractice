@@ -1,4 +1,5 @@
-//In this adaptation of our rationals class, use infix for more natural processing
+//NOTE: In this adaptation of our rationals class, use infix for more natural processing
+//NOTE: Precedence rules in Scala are the same as Java, C/C++, PEMDAS
 
 class Rational(x: Int, y: Int) {
   //Properties of a rational number, having numerator & denominator
