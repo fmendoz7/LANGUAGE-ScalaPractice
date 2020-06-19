@@ -1,3 +1,5 @@
+//In this adaptation of our rationals class, use infix for more natural processing
+
 class Rational(x: Int, y: Int) {
   //Properties of a rational number, having numerator & denominator
 
@@ -17,17 +19,17 @@ class Rational(x: Int, y: Int) {
   def numer = x
   def denom = y
 
-  //Less method
-  def less(that: Rational) = numer * that.denom < that.numer * denom
+  //Less Infix method
+  def < (that: Rational) = numer * that.denom < that.numer * denom
 
   //Max method
   def max(that: Rational) =
-    //"this" keyword
-    if(this.less(that)) that
+  //"this" keyword
+    if(this < that) that
     else this
 
   //Add Method
-  def add(that: Rational) =
+  def + (that: Rational) =
     new Rational(
       //Answer after making same denom
       //"this" keyword implies current object
@@ -39,7 +41,7 @@ class Rational(x: Int, y: Int) {
   def neg(that: Rational) = new Rational(-numer, denom)
 
   //Sub Method
-  def sub(that: Rational) = add(neg(that))
+  def - (that: Rational) = this + neg(that)
 
   override def toString = {
     //Important to normalize so you *DO NOT* run into arithmetic overflows
@@ -48,7 +50,7 @@ class Rational(x: Int, y: Int) {
   }
 }
 //------------------------------------------------------------
-object rationals {
+object rationalsInfix {
   //Created a new instances of class Rational (invoked constructor)
   val x = new Rational(1, 3)
   val y = new Rational(5, 7)
@@ -58,11 +60,12 @@ object rationals {
   //All you are doing is just listing parameters
   x.numer
   x.denom
-  x.sub(y).sub(z)
-  y.add(y)
-  x.less(y)
-  x.max(y)
+  x - y - z //Reexpressed with infix notation
+  y + y     //Reexpressed with infix notation
+  x < y     //Reexpressed with infix notation
+  x.max(y)  //Reexpressed with infix notation
   new Rational(2)
 }
 //------------------------------------------------------------
-rationals.x.add(rationals.y)
+rationalsInfix.x.+(rationalsInfix.y)
+rationalsInfix.x + rationalsInfix.y
