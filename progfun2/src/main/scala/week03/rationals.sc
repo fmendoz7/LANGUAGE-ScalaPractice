@@ -5,18 +5,17 @@ class Rational(x: Int, y: Int) {
   require(y != 0, "ERROR: Denominator must be nonzero!")
 
   //Assert checks the call of the function itself (throws AssertionError)
-  assert(x >= 0)
+  //assert(x >= 0)
 
   //Alternative Constructor (constructor overloading, itc using this)
   def this(x: Int) = this(x, 1)
 
   //Private: accessible within the class only
   private def gcd(a: Int, b: Int): Int = if(b == 0) a else gcd(b, a % b)
-  private val g = gcd(x,y)
 
   //Simplified numer and denom
-  def numer = x / g
-  def denom = y / g
+  def numer = x
+  def denom = y
 
   //Less method
   def less(that: Rational) = numer * that.denom < that.numer * denom
@@ -42,7 +41,10 @@ class Rational(x: Int, y: Int) {
   //Sub Method
   def sub(that: Rational) = add(neg(that))
 
-  override def toString = this.numer + "/" + this.denom
+  override def toString = {
+    val g = gcd(this.numer, this.denom)
+    this.numer/g + "/" + this.denom/g
+  }
 }
 //------------------------------------------------------------
 object rationals {
