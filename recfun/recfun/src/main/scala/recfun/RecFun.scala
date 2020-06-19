@@ -34,22 +34,23 @@ object RecFun extends RecFunInterface {
     def calculateCounter(chars: List[Char], decidingCounter: Int): Boolean = {
       if(chars.isEmpty == true && decidingCounter == 0) true
       else if (chars.isEmpty == true && decidingCounter != 0) false
-      else if (chars.isEmpty != true && decidingCounter >= 0) {
-        //So in recursion, esp with lists, iterate via HEAD and TAIL
+      else {
+        //(!!!) VAL
+        val newCount =
+          //So in recursion, esp with lists, iterate via HEAD and TAIL
           //By having a counter and no nonnegative check, you will fail edge case )))(((
-        if (chars.head == '(') {
-          decidingCounter + 1
-        }
+          if (chars.head == '(') {
+            decidingCounter + 1
+          }
 
-        else if (chars.head == ')') {
-          decidingCounter - 1
-        }
-      }
-      else false
+          else if (chars.head == ')') {
+            decidingCounter - 1
+          }
 
-      //This statement prevents overstepping one location in memory
-      if(chars.tail.isEmpty == false) {
-        calculateCounter(chars.tail, decidingCounter)
+          else decidingCounter
+
+        //This statement prevents overstepping one location in memory
+        calculateCounter(chars.tail, newCount)
       }
     }
     calculateCounter(chars, 0)
