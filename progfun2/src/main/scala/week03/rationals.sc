@@ -1,13 +1,38 @@
 class Rational(x: Int, y: Int) {
   //Properties of a rational number, having numerator & denominator
-  def numer = x
-  def denom = y
+
+  //Require enforces for preconditions (throws IllegalArgument error)
+  require(y != 0, "ERROR: Denominator must be nonzero!")
+
+  //Assert checks the call of the function itself (throws AssertionError)
+  assert(x >= 0)
+
+  //Alternative Constructor (constructor overloading, itc using this)
+  def this(x: Int) = this(x, 1)
+
+  //Private: accessible within the class only
+  private def gcd(a: Int, b: Int): Int = if(b == 0) a else gcd(b, a % b)
+  private val g = gcd(x,y)
+
+  //Simplified numer and denom
+  def numer = x / g
+  def denom = y / g
+
+  //Less method
+  def less(that: Rational) = numer * that.denom < that.numer * denom
+
+  //Max method
+  def max(that: Rational) =
+    //"this" keyword
+    if(this.less(that)) that
+    else this
 
   //Add Method
   def add(that: Rational) =
     new Rational(
       //Answer after making same denom
-      numer * that.denom + that.numer * denom,
+      //"this" keyword implies current object
+      this.numer * that.denom + that.numer * this.denom,
       denom * that.denom
     )
 
@@ -17,7 +42,7 @@ class Rational(x: Int, y: Int) {
   //Sub Method
   def sub(that: Rational) = add(neg(that))
 
-  override def toString = numer + "/" + denom
+  override def toString = this.numer + "/" + this.denom
 }
 //------------------------------------------------------------
 object rationals {
@@ -30,8 +55,11 @@ object rationals {
   //All you are doing is just listing parameters
   x.numer
   x.denom
-
-  x.add(y)
+  x.sub(y).sub(z)
+  y.add(y)
+  x.less(y)
+  x.max(y)
+  new Rational(2)
 }
 //------------------------------------------------------------
 rationals.x.add(rationals.y)
