@@ -11,11 +11,12 @@ object anonymousFunc {
       else loop(a + 1, acc + f(a))
     }
 
-    //Invoke loop recursively
+    //Invoke loop tail-recursively
     loop(a, 0)
   }
 }
 
+//Scala executes L2R, so sum goes to anonymous then applies numerical params
 anonymousFunc.sum(x => x)(1, 10)
 anonymousFunc.sum(x => x)(5, 10)
 anonymousFunc.sum(x => x)(10, 20)
