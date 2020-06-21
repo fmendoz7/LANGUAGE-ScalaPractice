@@ -41,6 +41,8 @@ abstract class TweetSet extends TweetSetInterface {
    * Question: Can we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
+    //filter and filterAcc method logic will be DEFAULTS for TweetSet
+
   def filter(p: Tweet => Boolean): TweetSet = this.filterAcc(p, new Empty)
     //I was WRONG. Apparently you can have 'DEFAULT' method logic
     //Parameter is a function taking in a tweet, returning a boolean
@@ -55,14 +57,17 @@ abstract class TweetSet extends TweetSetInterface {
     //p, the filtering logic, is left as p. Defining abstract method
       //Method logic should be up to the operator
 
-
   /**
    * Returns a new `TweetSet` that is the union of `TweetSet`s `this` and `that`.
    *
    * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def union(that: TweetSet): TweetSet = ???
+  def union(that: TweetSet): TweetSet
+    //Comparing THIS and THAT
+    //Want to COMBINE both elements, both of type TweetSet
+    //Want to overload union within Empty, have different implementation in NonEmpty
+      //Iterate through recursive calls, utilizing this and that
 
   /**
    * Returns the tweet from this set which has the greatest retweet count.
@@ -81,7 +86,7 @@ abstract class TweetSet extends TweetSetInterface {
    * have the highest retweet count.
    *
    * Hint: the method `remove` on TweetSet will be very useful.
-   * Question: Should we implment this method here, or should it remain abstract
+   * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
   def descendingByRetweet: TweetList = ???
@@ -114,12 +119,11 @@ abstract class TweetSet extends TweetSetInterface {
   def foreach(f: Tweet => Unit): Unit
 }
 //------------------------------------------------------------------------------------------
+//EMPTY CLASS: Leaf Nodes in Binary Tree of Tweets
 class Empty extends TweetSet {
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
 
-  /**
-   * The following methods are already implemented
-   */
+  /** The following methods are already implemented */
 
   def contains(tweet: Tweet): Boolean = false
 
@@ -128,22 +132,24 @@ class Empty extends TweetSet {
   def remove(tweet: Tweet): TweetSet = this
 
   def foreach(f: Tweet => Unit): Unit = ()
+
+  def union(that: TweetSet): TweetSet = that
 }
 //-----------------------------------------------------------------------------------------
+//NONEMPTY CLASS: Root Nodes and All Others (except leaves) In Binary Tree of Tweets
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
 
+  /** The following methods are already implemented */
 
-  /**
-   * The following methods are already implemented
-   */
-
+  //Recursively goes down binary tree from root to check if tweet exists
   def contains(x: Tweet): Boolean =
     if (x.text < elem.text) left.contains(x)
     else if (elem.text < x.text) right.contains(x)
     else true
 
+  //Recursively goes down binary tree from root to position tweet properly
   def incl(x: Tweet): TweetSet = {
     if (x.text < elem.text) new NonEmpty(elem, left.incl(x), right)
     else if (elem.text < x.text) new NonEmpty(elem, left, right.incl(x))
@@ -159,6 +165,16 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     f(elem)
     left.foreach(f)
     right.foreach(f)
+  }
+
+  def union(that: TweetSet): TweetSet = {
+    left.union(right.union(that)).incl(elem)
+      //First, union *this* left and *this* right
+      //Then, union the *this* right with *THAT* entire tweet
+      //MULTIPLE recursive calls
+        //Increment mechanism is .incl(elem)
+        // ..as it will INCLUDE ELEMENT of THAT tweetset to NEW BINARY TREE
+        //Remember, we are NOT modifying the old binary tree
   }
 }
 //-----------------------------------------------------------------------------------------
