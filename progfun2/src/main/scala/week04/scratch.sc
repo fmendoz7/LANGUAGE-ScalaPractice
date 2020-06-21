@@ -1,11 +1,16 @@
 /*
-import week03.Rational
+import week04.Rational
   //Imports Rational class from week03
-import week03.{Rational, Holistic}
+import week04.{Rational, Holistic}
   //Imports these classes from week03
-import week03._
+import week04._
   //Imports everything from week03 package
+import week04
+  //This IS NOT a valid statement
  */
+
+import week04.Hello
+import week04._
 
 object scratch {
 
@@ -33,4 +38,14 @@ object scratch {
       }
 
       class Square extends Shape with Planar with Movable
+*/
+
+/*
+  EXCEPTION HANDLING
+    - Very similar to Java
+    - Uses keyword 'throw'
+
+    throw Exc
+      //aborts evaluation with exception Exc
+      //Type of this expression is Nothing
 */
