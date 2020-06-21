@@ -23,6 +23,9 @@ object scratch {
       > Traits CANNOT have any parameters of their own. Only classes can.
       > Can have as many traits as you want
 
+    HIGHLY RECOMMEND you look at Scala's class hierarchy at
+    http://allaboutscala.com/tutorials/chapter-2-learning-basics-scala-programming/scala-tutorial-learn-scala-class-type-hierarchy/
+
       trait Planar {
         def height: Int
         def width: Int
