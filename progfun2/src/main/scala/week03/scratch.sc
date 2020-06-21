@@ -1,18 +1,19 @@
 /*
-import week04.Rational
+import week03.Rational
   //Imports Rational class from week03
-import week04.{Rational, Holistic}
+import week03.{Rational, Holistic}
   //Imports these classes from week03
-import week04._
+import week03._
   //Imports everything from week03 package
 import week04
   //This IS NOT a valid statement
  */
 
-import week04._
+import week03._
+  //Apparently, if I listed Rationals class under package object, I'm good
 
 object scratch {
-  new Hello
+  new Rational(1,2)
 }
 
 /*
