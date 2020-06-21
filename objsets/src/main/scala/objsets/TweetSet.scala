@@ -78,7 +78,12 @@ abstract class TweetSet extends TweetSetInterface {
    * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def mostRetweeted: Tweet = ???
+  def mostRetweeted: Tweet
+    //Use inbuilt Scala .max method on retweet attribute
+    //Have to overload for NonEmpty and Empty, obviously
+
+  //Helper method to recursively iterate
+  def mostRetweetedAcc(acc: Tweet): Tweet
 
   /**
    * Returns a list containing all tweets of this set, sorted by retweet count
@@ -90,6 +95,13 @@ abstract class TweetSet extends TweetSetInterface {
    * and be implemented in the subclasses?
    */
   def descendingByRetweet: TweetList = ???
+    //Output instance of class TweetList, tweets sorted high-low
+    //Functional Programming Languages have immutable data structures
+      //Hence, we are instantiating a NEW sorted TweetSet,
+    //PROCESS
+      //1. First, find highest tweet (mostRetweeted helper method)
+      //2. Copy said element from original set
+      //3. Put in new TweetList, recursively iterate by including element (.incl(elem))
 
   /**
    * The following methods are already implemented
@@ -134,6 +146,10 @@ class Empty extends TweetSet {
   def foreach(f: Tweet => Unit): Unit = ()
 
   def union(that: TweetSet): TweetSet = that
+
+  def mostRetweeted: Tweet = throw new java.util.NoSuchElementException()
+
+  def mostRetweetedAcc(acc: Tweet): Tweet = acc
 }
 //-----------------------------------------------------------------------------------------
 //NONEMPTY CLASS: Root Nodes and All Others (except leaves) In Binary Tree of Tweets
@@ -160,6 +176,8 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     if (tw.text < elem.text) new NonEmpty(elem, left.remove(tw), right)
     else if (elem.text < tw.text) new NonEmpty(elem, left, right.remove(tw))
     else left.union(right)
+      //How does this snippet preserve all nodes above the one in question
+      //Review how binary tree corrects when element is removed
 
   def foreach(f: Tweet => Unit): Unit = {
     f(elem)
@@ -176,6 +194,14 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
         // ..as it will INCLUDE ELEMENT of THAT tweetset to NEW BINARY TREE
         //Remember, we are NOT modifying the old binary tree
   }
+
+  def mostRetweeted: Tweet = mostRetweetedAcc(elem)
+    //Returns most retweeted tweet
+
+  def mostRetweetedAcc(acc: Tweet): Tweet =
+    left.mostRetweetedAcc(right.mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc))
+      //OPTION #1: elem
+      //OPTION #2: acc
 }
 //-----------------------------------------------------------------------------------------
 trait TweetList {
