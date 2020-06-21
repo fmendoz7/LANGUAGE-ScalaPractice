@@ -9,11 +9,14 @@ import week04
   //This IS NOT a valid statement
  */
 
-import week03._
+import week03.Rational
   //Apparently, if I listed Rationals class under package object, I'm good
 
 object scratch {
   new Rational(1,2)
+
+  def error(msg: String) = throw new Error(msg)
+  error("test")
 }
 
 /*
