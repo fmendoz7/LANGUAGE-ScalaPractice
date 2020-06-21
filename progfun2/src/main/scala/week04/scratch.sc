@@ -19,10 +19,15 @@ object scratch {
 
     PROPERTIES
       > Declared like an abstract class, just with 'trait' instead of abstract class
+      > More powerful than abstract classes because they have concrete methods
+      > Traits CANNOT have any parameters of their own. Only classes can.
+      > Can have as many traits as you want
 
       trait Planar {
         def height: Int
         def width: Int
         def surface = height * width
       }
+
+      class Square extends Shape with Planar with Movable
 */
