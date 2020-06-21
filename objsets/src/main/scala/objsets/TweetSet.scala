@@ -38,20 +38,28 @@ abstract class TweetSet extends TweetSetInterface {
    * This method takes a predicate and returns a subset of all the elements
    * in the original set for which the predicate is true.
    *
-   * Question: Can we implment this method here, or should it remain abstract
+   * Question: Can we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def filter(p: Tweet => Boolean): TweetSet = ???
+  def filter(p: Tweet => Boolean): TweetSet = this.filterAcc(p, new Empty)
+    //I was WRONG. Apparently you can have 'DEFAULT' method logic
+    //Parameter is a function taking in a tweet, returning a boolean
+    //Examples of viable filter parameters:
+      //1: # of retweets
 
   /**
-   * This is a helper method for `filter` that propagetes the accumulated tweets.
+   * This is a helper method for `filter` that propagates the accumulated tweets.
    */
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet
+    //In the filter helpee method, you want to start with nothing for acc (EMPTY TweetSet)
+    //p, the filtering logic, is left as p. Defining abstract method
+      //Method logic should be up to the operator
+
 
   /**
    * Returns a new `TweetSet` that is the union of `TweetSet`s `this` and `that`.
    *
-   * Question: Should we implment this method here, or should it remain abstract
+   * Question: Should we implement this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
   def union(that: TweetSet): TweetSet = ???
@@ -105,7 +113,7 @@ abstract class TweetSet extends TweetSetInterface {
    */
   def foreach(f: Tweet => Unit): Unit
 }
-
+//------------------------------------------------------------------------------------------
 class Empty extends TweetSet {
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
 
@@ -121,7 +129,7 @@ class Empty extends TweetSet {
 
   def foreach(f: Tweet => Unit): Unit = ()
 }
-
+//-----------------------------------------------------------------------------------------
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
@@ -153,7 +161,7 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     right.foreach(f)
   }
 }
-
+//-----------------------------------------------------------------------------------------
 trait TweetList {
   def head: Tweet
   def tail: TweetList
@@ -164,18 +172,17 @@ trait TweetList {
       tail.foreach(f)
     }
 }
-
+//-----------------------------------------------------------------------------------------
 object Nil extends TweetList {
   def head = throw new java.util.NoSuchElementException("head of EmptyList")
   def tail = throw new java.util.NoSuchElementException("tail of EmptyList")
   def isEmpty = true
 }
-
+//-----------------------------------------------------------------------------------------
 class Cons(val head: Tweet, val tail: TweetList) extends TweetList {
   def isEmpty = false
 }
-
-
+//-----------------------------------------------------------------------------------------
 object GoogleVsApple {
   val google = List("android", "Android", "galaxy", "Galaxy", "nexus", "Nexus")
   val apple = List("ios", "iOS", "iphone", "iPhone", "ipad", "iPad")
@@ -189,7 +196,7 @@ object GoogleVsApple {
    */
   lazy val trending: TweetList = ???
 }
-
+//-----------------------------------------------------------------------------------------
 object Main extends App {
   // Print the trending tweets
   GoogleVsApple.trending foreach println
