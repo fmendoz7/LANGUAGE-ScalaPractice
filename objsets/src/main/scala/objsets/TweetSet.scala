@@ -8,14 +8,14 @@ import TweetReader._
 class Tweet(val user: String, val text: String, val retweets: Int) {
   override def toString: String =
     "User: " + user + "\n" +
-    "Text: " + text + " [" + retweets + "]"
+      "Text: " + text + " [" + retweets + "]"
 }
 
 /**
  * This represents a set of objects of type `Tweet` in the form of a binary search
  * tree. Every branch in the tree has two children (two `TweetSet`s). There is an
  * invariant which always holds: for every branch `b`, all elements in the left
- * subtree are smaller than the tweet at `b`. The elements in the right subtree are
+ * subtree are smaller than the tweet at `b`. The eleemnts in the right subtree are
  * larger.
  *
  * Note that the above structure requires us to be able to compare two tweets (we
@@ -32,42 +32,32 @@ class Tweet(val user: String, val text: String, val retweets: Int) {
  *
  * [1] http://en.wikipedia.org/wiki/Binary_search_tree
  */
-abstract class TweetSet extends TweetSetInterface {
+abstract class TweetSet {
 
   /**
    * This method takes a predicate and returns a subset of all the elements
    * in the original set for which the predicate is true.
    *
-   * Question: Can we implement this method here, or should it remain abstract
+   * Question: Can we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-    //filter and filterAcc method logic will be DEFAULTS for TweetSet
+  def filter(p: Tweet => Boolean): TweetSet = {
+    this.filterAcc(p,new Empty)
+  }
 
-  def filter(p: Tweet => Boolean): TweetSet = this.filterAcc(p, new Empty)
-    //I was WRONG. Apparently you can have 'DEFAULT' method logic
-    //Parameter is a function taking in a tweet, returning a boolean
-    //Examples of viable filter parameters:
-      //1: # of retweets
 
   /**
-   * This is a helper method for `filter` that propagates the accumulated tweets.
+   * This is a helper method for `filter` that propagetes the accumulated tweets.
    */
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet
-    //In the filter helpee method, you want to start with nothing for acc (EMPTY TweetSet)
-    //p, the filtering logic, is left as p. Defining abstract method
-      //Method logic should be up to the operator
 
   /**
    * Returns a new `TweetSet` that is the union of `TweetSet`s `this` and `that`.
    *
-   * Question: Should we implement this method here, or should it remain abstract
+   * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
   def union(that: TweetSet): TweetSet
-    //Comparing THIS and THAT
-    //Want to COMBINE both elements, both of type TweetSet
-    //Want to overload union within Empty, have different implementation in NonEmpty
-      //Iterate through recursive calls, utilizing this and that
 
   /**
    * Returns the tweet from this set which has the greatest retweet count.
@@ -79,10 +69,7 @@ abstract class TweetSet extends TweetSetInterface {
    * and be implemented in the subclasses?
    */
   def mostRetweeted: Tweet
-    //Use inbuilt Scala .max method on retweet attribute
-    //Have to overload for NonEmpty and Empty, obviously
 
-  //Helper method to recursively iterate
   def mostRetweetedAcc(acc: Tweet): Tweet
 
   /**
@@ -91,17 +78,11 @@ abstract class TweetSet extends TweetSetInterface {
    * have the highest retweet count.
    *
    * Hint: the method `remove` on TweetSet will be very useful.
-   * Question: Should we implement this method here, or should it remain abstract
+   * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def descendingByRetweet: TweetList = ???
-    //Output instance of class TweetList, tweets sorted high-low
-    //Functional Programming Languages have immutable data structures
-      //Hence, we are instantiating a NEW sorted TweetSet,
-    //PROCESS
-      //1. First, find highest tweet (mostRetweeted helper method)
-      //2. Copy said element from original set
-      //3. Put in new TweetList, recursively iterate by including element (.incl(elem))
+  def descendingByRetweet: TweetList
+
 
   /**
    * The following methods are already implemented
@@ -130,12 +111,15 @@ abstract class TweetSet extends TweetSetInterface {
    */
   def foreach(f: Tweet => Unit): Unit
 }
-//------------------------------------------------------------------------------------------
-//EMPTY CLASS: Leaf Nodes in Binary Tree of Tweets
-class Empty extends TweetSet {
-  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
 
-  /** The following methods are already implemented */
+class Empty extends TweetSet {
+
+  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = acc
+
+  def union(that: TweetSet): TweetSet = that
+  /**
+   * The following methods are already implemented
+   */
 
   def contains(tweet: Tweet): Boolean = false
 
@@ -145,27 +129,36 @@ class Empty extends TweetSet {
 
   def foreach(f: Tweet => Unit): Unit = ()
 
-  def union(that: TweetSet): TweetSet = that
-
   def mostRetweeted: Tweet = throw new java.util.NoSuchElementException()
 
-  def mostRetweetedAcc(acc: Tweet): Tweet = acc
+  def mostRetweetedAcc(acc: Tweet) = acc
+
+  def descendingByRetweet: TweetList = Nil
 }
-//-----------------------------------------------------------------------------------------
-//NONEMPTY CLASS: Root Nodes and All Others (except leaves) In Binary Tree of Tweets
+
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
-  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = ???
+  def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = right.filterAcc(p,left.filterAcc(p, if (p(elem)) acc.incl(elem) else acc))
 
-  /** The following methods are already implemented */
+  def union(that: TweetSet): TweetSet = left.union(right.union(that)).incl(elem)
 
-  //Recursively goes down binary tree from root to check if tweet exists
+  def mostRetweeted: Tweet = mostRetweetedAcc(elem)
+
+  def mostRetweetedAcc(acc: Tweet): Tweet = left.mostRetweetedAcc(right.mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc))
+
+  def descendingByRetweet: TweetList = {
+    val tweet = mostRetweeted
+    new Cons(tweet, remove(tweet).descendingByRetweet)
+  }
+  /**
+   * The following methods are already implemented
+   */
+
   def contains(x: Tweet): Boolean =
     if (x.text < elem.text) left.contains(x)
     else if (elem.text < x.text) right.contains(x)
     else true
 
-  //Recursively goes down binary tree from root to position tweet properly
   def incl(x: Tweet): TweetSet = {
     if (x.text < elem.text) new NonEmpty(elem, left.incl(x), right)
     else if (elem.text < x.text) new NonEmpty(elem, left, right.incl(x))
@@ -176,8 +169,6 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     if (tw.text < elem.text) new NonEmpty(elem, left.remove(tw), right)
     else if (elem.text < tw.text) new NonEmpty(elem, left, right.remove(tw))
     else left.union(right)
-      //How does this snippet preserve all nodes above the one in question
-      //Review how binary tree corrects when element is removed
 
   def foreach(f: Tweet => Unit): Unit = {
     f(elem)
@@ -185,25 +176,8 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     right.foreach(f)
   }
 
-  def union(that: TweetSet): TweetSet = {
-    left.union(right.union(that)).incl(elem)
-      //First, union *this* left and *this* right
-      //Then, union the *this* right with *THAT* entire tweet
-      //MULTIPLE recursive calls
-        //Increment mechanism is .incl(elem)
-        // ..as it will INCLUDE ELEMENT of THAT tweetset to NEW BINARY TREE
-        //Remember, we are NOT modifying the old binary tree
-  }
-
-  def mostRetweeted: Tweet = mostRetweetedAcc(elem)
-    //Returns most retweeted tweet
-
-  def mostRetweetedAcc(acc: Tweet): Tweet =
-    left.mostRetweetedAcc(right.mostRetweetedAcc(if (elem.retweets > acc.retweets) elem else acc))
-      //OPTION #1: elem
-      //OPTION #2: acc
 }
-//-----------------------------------------------------------------------------------------
+
 trait TweetList {
   def head: Tweet
   def tail: TweetList
@@ -214,17 +188,18 @@ trait TweetList {
       tail.foreach(f)
     }
 }
-//-----------------------------------------------------------------------------------------
+
 object Nil extends TweetList {
   def head = throw new java.util.NoSuchElementException("head of EmptyList")
   def tail = throw new java.util.NoSuchElementException("tail of EmptyList")
   def isEmpty = true
 }
-//-----------------------------------------------------------------------------------------
+
 class Cons(val head: Tweet, val tail: TweetList) extends TweetList {
   def isEmpty = false
 }
-//-----------------------------------------------------------------------------------------
+
+
 object GoogleVsApple {
   val google = List("android", "Android", "galaxy", "Galaxy", "nexus", "Nexus")
   val apple = List("ios", "iOS", "iphone", "iPhone", "ipad", "iPad")
@@ -238,7 +213,7 @@ object GoogleVsApple {
    */
   lazy val trending: TweetList = (googleTweets union appleTweets).descendingByRetweet
 }
-//-----------------------------------------------------------------------------------------
+
 object Main extends App {
   // Print the trending tweets
   GoogleVsApple.trending foreach println
