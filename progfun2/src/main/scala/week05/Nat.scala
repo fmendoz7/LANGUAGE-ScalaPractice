@@ -1,4 +1,4 @@
-package week05
+//package week05
 
 abstract class Nat {
   def isZero: Boolean
@@ -11,13 +11,17 @@ abstract class Nat {
 object Zero extends Nat {
   def isZero = true
   def predecessor: Nat = throw new Error("0.predecessor")
-  def +(that: Nat)
-  def -(that: Nat)
+  def + (that: Nat) = that
+  def - (that: Nat) =
+    if (that.isZero) this
+    else throw new Error ("0.predecessor")
 }
 
 //Succ helper method
 class Succ(n: Nat) extends Nat {
   def isZero = false
   def predecessor = n
+  def + (that: Nat) = new Succ(n + that)
+  def - (that: Nat) = new Succ(n - that)
 }
 
