@@ -10,24 +10,30 @@ package patmat
  * present in the leaves below it. The weight of a `Fork` node is the sum of the weights of these
  * leaves.
  */
+
 abstract class CodeTree
 case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
 case class Leaf(char: Char, weight: Int) extends CodeTree
 
-/**
- * Assignment 4: Huffman coding
- *
- */
+/** Assignment 4: Huffman coding */
 trait Huffman extends HuffmanInterface {
 
   // Part 1: Basics
-  def weight(tree: CodeTree): Int = ??? // tree match ...
+    //IMPORTANT: because this is under the general Huffman trait, you MUST extend to case classes
+    //the CodeTree type parameter, tree, must pattern match with the case class scenarios described below
+  def weight(tree: CodeTree): Int = tree match {
+      case Fork(_, _, _, w) => w
+      case Leaf(_, w) => w
+    }
 
-  def chars(tree: CodeTree): List[Char] = ??? // tree match ...
+  def chars(tree: CodeTree): List[Char] = tree match {
+    case Fork(_, _, cs, _) => cs
+    case Leaf(cs, _) => cs
+  }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) =
     Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
-
+//--------------------------------------------------------------------------------------------------
   // Part 2: Generating Huffman trees
 
   /**
@@ -115,7 +121,7 @@ trait Huffman extends HuffmanInterface {
    */
   def createCodeTree(chars: List[Char]): CodeTree = ???
 
-
+  //--------------------------------------------------------------------------------------------------
   // Part 3: Decoding
 
   type Bit = Int
