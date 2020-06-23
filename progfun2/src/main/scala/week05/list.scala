@@ -28,3 +28,45 @@ object List {
   //Overloading. If no parameters, null list
   def apply[T]() = new Nil
 }
+
+/*
+  IMPORTANT PROPERTIES OF LSITS IN SCALA
+    - Exclusively in Scala:
+        > Lists are IMMUTABLE
+        > Lists are RECURSIVE
+    - Lists elements have this structure
+
+    -----------------------------
+    | element | pointer to next |
+    -----------------------------
+
+    EX:
+      val fruit: List[String] = List("apples", "oranges", "pears")
+      val nums: List[Int] = List(1, 2, 3, 4)
+      val diag3: List[List[Int]] = List(List(1, 0, 0), List(0, 1, 0), List(0, 0, 1))
+      val empty: List[Nothing] = List()
+
+    - Lists are constructed from
+        > Empty list Nil
+        > Construction operation ::
+
+    EX:
+      fruit = "apples" :: ("oranges" :: ("pears" :: Nil))
+      nums = 1 :: (2 :: (3 :: (4 :: Nil)))
+      empty = Nil
+
+      A :: B :: C == A :: (B :: C)
+*/
+
+/*
+  SCALA LIST PATTERN MATCHING
+    - Nil
+        > The Nil Constant
+    - p :: ps
+        > Pattern matching a list with head matching p, tail matching ps
+
+    EX:
+      List(p1, ..., pn)
+        //the same as p1 :: ... :: pn :: Nil, or p1 :: ...(pn :: Nil)
+          //Have n - 1 braces succeeding Nil
+*/

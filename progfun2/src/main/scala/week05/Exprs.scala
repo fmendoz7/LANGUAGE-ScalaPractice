@@ -1,14 +1,14 @@
-trait Expr {
-  //Pattern Matching using eval
-  def eval: Int = this match {
-      //Definitely possible to define evaluation function as method of base trait
-    case Number(n) => n
+package week05
 
-    case Sum(e1, e2) => e1.eval + e2.eval
+object Exprs {
+  def show(e: Expr) = e match {
+    case Number(x) => x.toString
+
+    case Sum(l, r) => show(l) + " + " + show(r)
   }
-}
 
-eval(Sum(Number(1), Number(2)))
+  show(Sum(Number(1), Number(44)))
+}
 
 /*
   PATTERN MATCHING
