@@ -1,4 +1,6 @@
-//package week05
+package week05
+
+//import week05.Boolean
 
 trait List[T] {
   def isEmpty: Boolean

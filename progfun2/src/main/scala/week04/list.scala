@@ -1,6 +1,6 @@
 package week04
 
-import week05.Boolean
+//import week04.Boolean
 
 //Function creating a list consisting of a single element
 //def singleton[T](elem: T) = new Cons[T](elem, new Nil[T])
