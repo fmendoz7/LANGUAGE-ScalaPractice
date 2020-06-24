@@ -1,0 +1,12 @@
+P=
+Xplugin=
+Xplugin-disable=
+Xplugin-require=
+deprecation=true
+eclipse.preferences.version=1
+optimise=true
+scala.compiler.additionalParams=-Yinline-warnings
+scala.compiler.installation=2.11
+scala.compiler.sourceLevel=2.11
+scala.compiler.useProjectSettings=false
+unchecked=true
