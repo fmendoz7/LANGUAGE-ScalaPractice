@@ -1,8 +1,5 @@
 package patmat
 
-import common._
-
-object Huffman {
 /**
  * A huffman code is represented by a binary tree.
  *
@@ -25,18 +22,20 @@ trait Huffman extends HuffmanInterface {
 
   // Part 1: Basics
   def weight(tree: CodeTree): Int = tree match {
+    //Handle case classes for pattern matching
+    //Reminiscent of constructor overloading
     case Fork(_, _, _, weight) => weight
     case Leaf(_, weight) => weight
   }
 
+  //REMEMBER: CodeTree is a LIST OF CHARACTERS
   def chars(tree: CodeTree): List[Char] = tree match {
-    case Fork(l, r, chs, _) => chs
-    case Leaf(char, _) => List(char)
+    case Fork(l, r, chars, _) => chars
+    case Leaf(chars, _) => List(chars)
   }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) =
-    Fork(left, right, chars(left) ::: chars(right),
-      weight(left) + weight(right))
+    Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
 
   // Part 2: Generating Huffman trees
 
@@ -93,8 +92,9 @@ trait Huffman extends HuffmanInterface {
         if (chars.head == target) (prev._1, prev._2 + 1)
         else (chars.head :: prev._1, prev._2)
     }
+  }
 
-    /**
+  /**
    * Returns a list of `Leaf` nodes for a given frequency table `freqs`.
    *
    * The returned list should be ordered by ascending weights (i.e. the
@@ -110,19 +110,15 @@ trait Huffman extends HuffmanInterface {
     }
   }
 
-    /**
-     * Common insertion sort helper
-     */
-
-    def insertBySort[T](newElem: T, list: List[T],
-                        comeFirst: (T, T) => Boolean): List[T] = {
-      list match {
-        case List() => List(newElem)
-        case tHead :: tTail =>
-          if (comeFirst(newElem, tHead)) newElem :: list
-          else tHead :: insertBySort(newElem, tTail, comeFirst)
-      }
+  def insertBySort[T](newElem: T, list: List[T],
+                      comeFirst: (T, T) => Boolean): List[T] = {
+    list match {
+      case List() => List(newElem)
+      case tHead :: tTail =>
+        if (comeFirst(newElem, tHead)) newElem :: list
+        else tHead :: insertBySort(newElem, tTail, comeFirst)
     }
+  }
 
   /**
    * Checks whether the list `trees` contains only one single code tree.
@@ -177,8 +173,8 @@ trait Huffman extends HuffmanInterface {
    * code trees contains only one single tree, and then return that singleton list.
    */
   def until(done: List[CodeTree] => Boolean, merge: List[CodeTree] => List[CodeTree])(trees: List[CodeTree]): List[CodeTree] = {
-    if (done(trees)) trees
-    else until(done, merge)(merge(trees))
+      if(done(trees)) trees
+      else until(done, merge)(merge(trees))
   }
 
   /**
@@ -197,14 +193,12 @@ trait Huffman extends HuffmanInterface {
   // Part 3: Decoding
 
   type Bit = Int
-
+  def CONST_LEFT = 0
+  def CONST_RIGHT = 1
   /**
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-  def CONST_LEFT = 0
-  def CONST_RIGHT = 1
-
   def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
 
     def decodeRecursive(currentTree: CodeTree, bits: List[Bit]): List[Char] = {
@@ -241,7 +235,6 @@ trait Huffman extends HuffmanInterface {
    */
   def decodedSecret: List[Char] = {
     val revealSecret = decode(frenchCode, secret)
-
     revealSecret
   }
 
@@ -262,20 +255,20 @@ trait Huffman extends HuffmanInterface {
     }
   }
 
-    def encodeEach(tree: CodeTree, ch: Char, acc: List[Bit]): List[Bit] = {
-      tree match {
-        case fork: Fork =>
-          if (fork.chars.contains(ch)) {
-            val leftTraverse = encodeEach(fork.left, ch, acc ::: List(CONST_LEFT))
-            if (!leftTraverse.isEmpty) leftTraverse
-            else encodeEach(fork.right, ch, acc ::: List(CONST_RIGHT))
-          } else {
-            Nil
-          }
-        case leaf: Leaf =>
-          if (leaf.char == ch) acc else Nil
-      }
+  def encodeEach(tree: CodeTree, ch: Char, acc: List[Bit]): List[Bit] = {
+    tree match {
+      case fork: Fork =>
+        if (fork.chars.contains(ch)) {
+          val leftTraverse = encodeEach(fork.left, ch, acc ::: List(CONST_LEFT))
+          if (!leftTraverse.isEmpty) leftTraverse
+          else encodeEach(fork.right, ch, acc ::: List(CONST_RIGHT))
+        } else {
+          Nil
+        }
+      case leaf: Leaf =>
+        if (leaf.char == ch) acc else Nil
     }
+  }
 
   // Part 4b: Encoding using code table
 
@@ -343,7 +336,5 @@ trait Huffman extends HuffmanInterface {
     quickEncodeEach(text)
   }
 }
-}
 
-
-//object Huffman extends Huffman
+object Huffman extends Huffman
