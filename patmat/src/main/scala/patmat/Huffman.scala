@@ -1,5 +1,29 @@
 package patmat
 
+import common._
+import scala.collection.immutable._
+
+/**
+ * Assignment 4: Huffman coding
+ *
+ */
+object Huffman {
+
+  /**
+   * A huffman code is represented by a binary tree.
+   *
+   * Every `Leaf` node of the tree represents one character of the alphabet that the tree can encode.
+   * The weight of a `Leaf` is the frequency of appearance of the character.
+   *
+   * The branches of the huffman tree, the `Fork` nodes, represent a set containing all the characters
+   * present in the leaves below it. The weight of a `Fork` node is the sum of the weights of these
+   * leaves.
+   */
+  abstract class CodeTree
+  case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
+  case class Leaf(char: Char, weight: Int) extends CodeTree
+
+
 /**
  * A huffman code is represented by a binary tree.
  *

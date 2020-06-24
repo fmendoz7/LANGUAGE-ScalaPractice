@@ -1,0 +1,30 @@
+[0m[[0m[31merror[0m] [0m[0mC:\Users\franc\IdeaProjects\patmat\src\main\scala\patmat\Huffman.scala:31:25: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Char[0m
+[0m[[0m[31merror[0m] [0m[0m required: List[Char][0m
+[0m[[0m[31merror[0m] [0m[0m    case Leaf(cs, _) => cs[0m
+[0m[[0m[31merror[0m] [0m[0m                        ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\franc\IdeaProjects\patmat\src\main\scala\patmat\Huffman.scala:243:10: constructor cannot be instantiated to expected type;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : patmat.Leaf[0m
+[0m[[0m[31merror[0m] [0m[0m required: Int[0m
+[0m[[0m[31merror[0m] [0m[0m    case Leaf(c, w) => List( (c, List()) )[0m
+[0m[[0m[31merror[0m] [0m[0m         ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\franc\IdeaProjects\patmat\src\main\scala\patmat\Huffman.scala:244:10: constructor cannot be instantiated to expected type;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : patmat.Fork[0m
+[0m[[0m[31merror[0m] [0m[0m required: Int[0m
+[0m[[0m[31merror[0m] [0m[0m    case Fork(left, right, cs, w) => mergeCodeTables(convert(left), convert(right))[0m
+[0m[[0m[31merror[0m] [0m[0m         ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\franc\IdeaProjects\patmat\src\main\scala\patmat\Huffman.scala:244:53: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Huffman.this.CodeTable[0m
+[0m[[0m[31merror[0m] [0m[0m    (which expands to)  List[(Char, List[Int])][0m
+[0m[[0m[31merror[0m] [0m[0m required: (Char, List[Huffman.this.Bit])[0m
+[0m[[0m[31merror[0m] [0m[0m    (which expands to)  (Char, List[Int])[0m
+[0m[[0m[31merror[0m] [0m[0m    case Fork(left, right, cs, w) => mergeCodeTables(convert(left), convert(right))[0m
+[0m[[0m[31merror[0m] [0m[0m                                                    ^[0m
+[0m[[0m[31merror[0m] [0m[0mC:\Users\franc\IdeaProjects\patmat\src\main\scala\patmat\Huffman.scala:242:44: type mismatch;[0m
+[0m[[0m[31merror[0m] [0m[0m found   : Int => (Char, List[Huffman.this.Bit])[0m
+[0m[[0m[31merror[0m] [0m[0m    (which expands to)  Int => (Char, List[Int])[0m
+[0m[[0m[31merror[0m] [0m[0m required: Huffman.this.CodeTable[0m
+[0m[[0m[31merror[0m] [0m[0m    (which expands to)  List[(Char, List[Int])][0m
+[0m[[0m[31merror[0m] [0m[0m  def convert(tree: CodeTree): CodeTable = {[0m
+[0m[[0m[31merror[0m] [0m[0m                                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m5 errors found[0m
