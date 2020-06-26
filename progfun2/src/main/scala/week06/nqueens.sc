@@ -30,3 +30,8 @@ object nqueens {
   //Display solutions to 8-queens problem
   (queens(4) map show) mkString "\n"
 }
+
+(nqueens.queens(4) map nqueens.show) mkString "\n"
+(nqueens.queens(8) take 3 map nqueens.show) mkString "\n"
+
+//(nqueens.queens(4) map nqueens.show) mkString "\n"
