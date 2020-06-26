@@ -23,9 +23,13 @@ object test {
   def scalarProduct1(xs: Vector[Double], ys: Vector[Double]): Double =
     (xs zip ys).map(xy => xy._1 * xy._2).sum
 
-  //APPROACH #2: Compute Scalar Product using PATTERN MATCHING
+  //APPROACH #2: Compute the Scalar Product using PATTERN MATCHING
   def scalarProduct2(xs: Vector[Double], ys: Vector[Double]): Double =
     (xs zip ys).map{case(x,y) => x * y}.sum
+
+  //APPROACH #3: Compute the Scalar Product using FOR LOOP
+  def scalarProduct(xs: List[Double], ys: List[Double]): Double =
+    (for ((x,y) <= xs zip ys) yield (x*y)).sum
 }
 
 /*
