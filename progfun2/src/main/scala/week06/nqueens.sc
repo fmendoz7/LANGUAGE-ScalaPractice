@@ -1,5 +1,3 @@
-//package week06
-
 object nqueens {
   def queens(n: Int): Set[List[Int]] = {
     def placeQueens(k: Int): Set[List[Int]] =
@@ -11,7 +9,7 @@ object nqueens {
           col <- 0 until n
           if isSafe(col, queens)
         } yield col :: queens
-      placeQueens(n)
+    placeQueens(n)
   }
 
   def isSafe(col: Int, queens: List[Int]): Boolean = {
@@ -25,8 +23,8 @@ object nqueens {
   def show(queens: List[Int]) = {
     val lines =
       for(col <- queens.reverse)
-      yield Vector.fill(queens.length)("* ").updated(col, "X ").mkString
-        "\n" + (lines mkString "\n")
+        yield Vector.fill(queens.length)("* ").updated(col, "X ").mkString
+    "\n" + (lines mkString "\n")
   }
 
   //Display solutions to 8-queens problem
