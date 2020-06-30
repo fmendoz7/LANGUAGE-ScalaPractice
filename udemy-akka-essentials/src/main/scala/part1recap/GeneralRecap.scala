@@ -1,5 +1,8 @@
 package part1recap
 
+// ._ import notation imports EVERYTHING from that package
+import scala.util._
+
 // 'extends App' means you can run as a standalone application
 object GeneralRecap extends App {
   //values CANNOT be reassigned
@@ -51,6 +54,8 @@ object GeneralRecap extends App {
   aCroc.eat(aDog)
   aCroc eat aDog
 
+  //----------------------------------------------------------
+
   //CLASSES: Anonymous Classes
 
   //val aCarnivore = new Carnivore
@@ -62,5 +67,78 @@ object GeneralRecap extends App {
 
   aCarnivore eat aDog
 
-  //Generics
+  //GENERICS
+  abstract class MyList[+A]
+
+  //Companion Objects
+  object MyList
+
+  //Singleton Objects
+
+  //Case Classes
+  case class Person(name: String, age: Int)
+
+  //Exceptions
+  val aPotentialFailure = try {
+    throw new RuntimeException("I'm Innocent, I Swear!")
+    }
+    //This returns nothing
+
+    catch {
+      case e: Exception => "I caught an exception!"
+    }
+
+    finally {
+      //side effects, happen no matter what
+      println("Some Logs.. dododo")
+    }
+
+  //----------------------------------------------------------
+  //FUNCTIONAL PROGRAMMING
+
+  //Object Oriented Style for function incrementing a value
+  val incrementer = new Function1[Int, Int] {
+    override def apply(v1: Int): Int = v1 + 1
+  }
+
+  val incremented = incrementer(42) //43
+  //Scala Compiler Trick: when it sees value being called like an object,
+  //automatically applies apply method
+
+  //Anonymous/Lambda Function
+    // Int => Int === Function1[Int, Int]
+  val anonymousIncrementer = (x: Int) => x + 1
+
+  //Functional Programming is ALL ABOUT working with functions as first class
+  List(1,2,3).map(incrementer)
+
+  val pairs = for {
+    num <- List(1,2,3,4)
+    char <- List('a','b','c','d')
+  } yield num + "-" + char
+
+  //List(1,2,3,4).flatMap(num => List('a','b','c','d').map(char => num + "-" + char))
+
+  //Sequences, Array, List, Vector, Map, Tuples, Sets
+
+  //Collections
+    //Option and Try
+  val anOption = Some(2)
+  val aTry = Try {
+    throw new RuntimeException
+  }
+
+  //PATTERN MATCHING
+  val unknown = 2
+  val order = unknown match {
+    case 1 => "first"
+    case 2 => "second"
+    case _ => "unknown"
+  }
+
+  val bob = Person("Bob", 22)
+  val greeting = bob match {
+    case Person(n, _) => s"Hi, my name is $n"
+  }
+
 }
