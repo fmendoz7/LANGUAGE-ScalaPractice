@@ -138,7 +138,9 @@ object GeneralRecap extends App {
 
   val bob = Person("Bob", 22)
   val greeting = bob match {
+    //s interpolated string
     case Person(n, _) => s"Hi, my name is $n"
+    case _ => "I don't know my name"
   }
 
 }
