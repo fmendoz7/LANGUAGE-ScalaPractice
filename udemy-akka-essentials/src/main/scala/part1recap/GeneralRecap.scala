@@ -144,3 +144,23 @@ object GeneralRecap extends App {
   }
 
 }
+
+/*
+  -- SCALA ESSENTIALS --
+    BASICS
+      - Val/Var, expressions, code blocks, unit type
+      - Functions, stack/tail recursion
+
+    OOP
+      - Classes & objects, parameters, fields, methods
+      - Abstract classes, traits, anonymous classes
+      - Generics, case classes, exceptions
+
+    FUNCTIONAL PROGRAMMING
+      - Function types, higher-order functions
+      - Map, flatMap, filter, for-comprehensions
+      - Collections, Option, Try
+
+    PATTERN MATCHING
+      - All patterns
+*/
