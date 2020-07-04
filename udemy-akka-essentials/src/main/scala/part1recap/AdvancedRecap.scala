@@ -9,6 +9,7 @@ object AdvancedRecap extends App {
     //Does not provide an answer for any possible input value it could be given
     //Hence, provides an answer only for a subset of possible data, defining data IT CAN handle
   val partialFunction: PartialFunction[Int, Int] = {
+      //Only accepts these values
       case 1 => 42
       case 2 => 65
       case 5 => 999
@@ -27,6 +28,14 @@ object AdvancedRecap extends App {
     case 1 => 42
     case _ => 0
   }
+
+  /*
+  // ALTERNATIVE CASE of declaring modifiedList
+  val modifiedList2 = List(1,2,3).map({
+    case 1 => 42
+    case _ => 0
+  })
+  */
 
   //LIFTING
   val lifted = partialFunction.lift
