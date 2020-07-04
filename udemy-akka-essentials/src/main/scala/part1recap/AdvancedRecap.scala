@@ -37,11 +37,12 @@ object AdvancedRecap extends App {
   })
   */
 
+  //-----------------------------------------------------------------------------------
   //LIFTING
   val lifted = partialFunction.lift
     //total function Int => Option[Int]
-  lifted(2)
-  lifted(5000)
+  lifted(2) //case for input of 2
+  lifted(5000)  //None, will throw a matchError
 
   //orElse
   val pfChain = partialFunction.orElse[Int, Int] {
@@ -50,29 +51,32 @@ object AdvancedRecap extends App {
 
   pfChain(5)    //999 per partialFunction
   pfChain(60)   // 9000
-  pfChain(457)  //throws a MatchError
-
-
+  pfChain(457)  //throws a MatchError, no case for 457
+  // -----------------------------------------------------------------------------------
   //TYPE ALIASES
+    // Definition: Literally make a self-defined type a literal alias of another partial function
   type ReceiveFunction = PartialFunction[Any, Unit]
+    //ReceiveFunction is an alias for PartialFunction
 
   def receive: ReceiveFunction = {
     case 1 => println("hello")
     case _ => println("Anomalous Input Detected")
   }
-
+//-----------------------------------------------------------------------------------
   //IMPLICITS
-  //Implicit Parameters
+  //IMPLICIT Parameters
       // -
   implicit val timeout = 3000
   def setTimeout(f: () => Unit)(implicit timeout: Int) = f()
 
-  setTimeout(() => println("timeout"))  //extra parameter list omitted
+  setTimeout(() => println("timeout"))
+    //extra parameter list omitted, since implicit value is defined before
 
-  //Implicit Conversions
+  //IMPLICIT Conversions
     //1) Implicit defs
   case class Person(name: String) {
     def greet = s"Hi, my name is $name"
+    //Converts Person object called in front of greet method into a string
   }
 
   implicit def fromStringToPerson(string: String): Person = Person(string)
@@ -80,24 +84,28 @@ object AdvancedRecap extends App {
     // fromStringToPerson("Peter").greet
     // This type conversion is done automatically by the compiler
 
-  //Implicit Classes
+  //IMPLICIT Classes
   implicit class Dog(name: String) {
     def bark = println("bark!")
   }
+
   "Lassie".bark
+    // Converts DOG class into a string, then calling bark method
     // new Dog("Lassie").bark
     // Creation of new instance is automatically done by the compiler
 
   //organize
-  //local scope
+    // LOCAL scope
   implicit val inverseOrdering: Ordering[Int] = Ordering.fromLessThan(_ > _)
   List(1,2,3).sorted  // List(3, 2, 1)
 
-  // imported scope
+  // IMPORTED scope
   import scala.concurrent.ExecutionContext.Implicits.global
   val future = Future {
     println("Hello, Future")
   }
+
+  //Fetches in this order: local scope -> imported scope
 
   // Companion Objects of types included in the call
   object Person {
@@ -105,5 +113,5 @@ object AdvancedRecap extends App {
   }
 
   List(Person("Bob"), Person("Alice")).sorted
-
+    // Calls the implicit personOrdering value
 }

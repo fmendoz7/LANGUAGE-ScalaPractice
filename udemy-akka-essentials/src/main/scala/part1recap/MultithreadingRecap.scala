@@ -5,6 +5,7 @@ import scala.util.{Failure, Success}
 
 object MultithreadingRecap extends App{
   // Create threads on the JVM
+    // - To use multithreading in Scala, you use a Thread object
   val aThread = new Thread(() => println("I'm running in parallel"))
   aThread.start()
   aThread.join()
