@@ -238,6 +238,26 @@ object ActorCapabilities extends App {
 
   val account = system.actorOf(Props[BankAccountActor1], "BankAccount1")
   val person = system.actorOf(Props[Person], "Bilionaire")
+
+  /*
+    HOW AKKA WORKS
+      - Akka has a thread pool it shares with actors
+      - Actors have
+          > Message Queue
+          > Message Handler
+      - Sending a message is basically enqueuing it in their mailbox (Thread-Safe)
+      - Actors NEED a thread to start running any code
+
+    HOW ACTORS PROCESS MESSAGES
+      - Thread scheduled to RUN the actor
+      - Messages extracted from the mailbox, in order
+      - Thread invokes the handler on each message
+      - (!!!) Only ONE thread may operate on an actor at any time
+      - (!!!) Actors are effectively single-threaded
+      - (!!!) Thread may NEVER release actor in the middle of processing messages
+      - Message delivery guarantees, at most, DELIVERY ONCE
+  */
+
   //-------------------------------------------------------------------------------------
 
 //  // DOMAIN of the counter
