@@ -131,12 +131,23 @@ object ChangingActorBehavior extends App {
   class Counter extends Actor {
     import Counter._
 
-    override def receive: Receive = {
-      ???
-      //can have a default 'state' (really just a message handler)
+    //SOLUTION: Incremented generic counting message handler called countReceive
+    override def receive: Receive = countReceive(0)
+      //countReceive is the go-to, default message handler, with 0 as the starting amount
+
+    //SOLUTION: This is not a message handler, but a method for counting
+    def countReceive(currentCount: Int): Receive = {
+      case Increment =>
+        println(s"[$currentCount] incrementing")
+        context.become(countReceive(currentCount))
+
+      case Decrement =>
+
+      case Print => println(s"[counter] my current count is $currentCount")
     }
 
-    //define as many message handlers as you like
+    //[CORRECT] define as many message handlers as you like
+    //[CORRECT] Naively assume will need some variable to keep track
   }
 
   import Counter._
