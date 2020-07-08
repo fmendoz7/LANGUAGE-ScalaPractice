@@ -176,7 +176,7 @@ object ChangingActorBehavior extends App {
     override def receive: Receive = {
       //REM: The way you represent parameters in functions is param1 => param2
       case Vote(c) => candidate = Some(c)
-      case VoteStatusRequest => sender() ! candidate
+      case VoteStatusRequest => sender() ! VoteStatusReply(candidate)
           //Scenario #1: If you HAVE voted, candidate returned
           //Scenario #2: If you HAVEN'T voted, nothing gets returned
     }
@@ -192,6 +192,20 @@ object ChangingActorBehavior extends App {
       case AggregateVotes(citizens) =>
         stillWaiting = citizens
         citizens.foreach(citizenRef => citizenRef ! VoteStatusRequest)
+      case VoteStatusReply(None) =>
+        //Citizen has not voted yet
+        sender() ! VoteStatusRequest //this might end up in an infinite loop
+
+      case VoteStatusReply(Some(candidate)) =>
+        val newStillWaiting = stillWaiting - sender()
+        val currentVotesOfCandidate = currentStats.getOrElse(candidate, 0)
+        currentStats = currentStats + (candidate -> (currentVotesOfCandidate + 1))
+        if (newStillWaiting.isEmpty) {
+          println(s"[Aggregator] poll stats: $currentStats")
+        } else {
+          stillWaiting = newStillWaiting
+        }
+
     }
   }
 
