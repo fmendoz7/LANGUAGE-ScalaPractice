@@ -137,10 +137,14 @@ object ChangingActorBehavior extends App {
 
     //SOLUTION: This is not a message handler, but a method for counting
     def countReceive(currentCount: Int): Receive = {
+      //[!!!] THE KEY is to rewrite MUTABLE STATE INTO THE HANDLERS you want to support
+          //This is how you turn STATEFUL into STATELESS actors
+      //Increment case, modify within context.become
       case Increment =>
         println(s"[$currentCount] incrementing")
         context.become(countReceive(currentCount + 1))
 
+      //Decrement case, modify within context.become - 1
       case Decrement =>
         println(s"[$currentCount] decrementing")
         context.become(countReceive(currentCount - 1))
@@ -166,12 +170,24 @@ object ChangingActorBehavior extends App {
   case object VoteStatusRequest
   case class VoteStatusReply(candidate: Option[String])
 
+  //Stateful way to represent
   class Citizen extends Actor {
-    override def receive: Receive = ???
+    override def receive: Receive = {
+      case Vote(candidate) => candidate = Some(c)
+    }
   }
 
+  case class AggregateVotes(citizens: Set[ActorRef])
   class VoteAggregator extends Actor {
-    override def receive: Receive = ???
+    //Need to incorporate Set() and Map() for functionality to work
+    var stillWaiting: Set[ActorRef] = Set()
+    var currentStats: Map[String, Int] = Map()
+
+    override def receive: Receive = {
+      case AggregateVotes(citizens) =>
+        stillWaiting = citizens
+        citizens.foreach(citizenRef => citizenRef ! VoteStatusRequest)
+    }
   }
 
   val alice = system.actorOf(Props[Citizen])
