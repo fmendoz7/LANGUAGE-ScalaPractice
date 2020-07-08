@@ -166,14 +166,19 @@ object ChangingActorBehavior extends App {
   // ----------------------------------------------------------------------------------------------------------------------
   // OYO EXERCISE #2
   case class Vote(candidate: String)
-  case class AggregateVotes(citizens: Set[ActorRef])
   case object VoteStatusRequest
   case class VoteStatusReply(candidate: Option[String])
 
   //Stateful way to represent
   class Citizen extends Actor {
+    var candidate: Option[String] = None
+
     override def receive: Receive = {
-      case Vote(candidate) => candidate = Some(c)
+      //REM: The way you represent parameters in functions is param1 => param2
+      case Vote(c) => candidate = Some(c)
+      case VoteStatusRequest => sender() ! candidate
+          //Scenario #1: If you HAVE voted, candidate returned
+          //Scenario #2: If you HAVEN'T voted, nothing gets returned
     }
   }
 
