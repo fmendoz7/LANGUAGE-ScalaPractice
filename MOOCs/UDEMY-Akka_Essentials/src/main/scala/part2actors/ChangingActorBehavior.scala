@@ -169,7 +169,7 @@ object ChangingActorBehavior extends App {
   case object VoteStatusRequest
   case class VoteStatusReply(candidate: Option[String])
 
-  //Stateful way to represent
+  //Stateful way to represent Citizen
   class Citizen extends Actor {
     var candidate: Option[String] = None
 
@@ -182,6 +182,7 @@ object ChangingActorBehavior extends App {
     }
   }
 
+  //Stateful way to represent VoteAggregator
   case class AggregateVotes(citizens: Set[ActorRef])
   class VoteAggregator extends Actor {
     //Need to incorporate Set() and Map() for functionality to work
