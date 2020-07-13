@@ -11,6 +11,7 @@ object ChildActorsExercise extends App {
     case class WordCountTask(id: Int, text: String)
     case class WordCountReply(id: Int, count: Int)
   }
+
   class WordCounterMaster extends Actor {
     import WordCounterMaster._
 
