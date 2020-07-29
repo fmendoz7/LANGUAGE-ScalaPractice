@@ -1,10 +1,11 @@
 package part2actors
 
+// Import Akka actor stuff
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 
 object ChildActorsExercise extends App {
 
-  // Distributed Word counting
+  // Distributed Word counting, using Round Robin logic
 
   object WordCounterMaster {
     case class Initialize(nChildren: Int)

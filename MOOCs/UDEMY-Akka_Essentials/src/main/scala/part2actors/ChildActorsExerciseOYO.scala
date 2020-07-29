@@ -1,7 +1,7 @@
 package part2actors
 
 import akka.actor.Actor
-import part2actors.ChildActorsExerciseOYO.WordCounterMaster.WordCountTask
+import part2actors.ChildActorsExerciseOYO.WordCounterMaster.{WordCountReply, WordCountTask}
 
 /*
   create WordCounterMaster
@@ -25,41 +25,37 @@ object ChildActorsExerciseOYO extends App{
 
   //DOMAIN: WordCounterMaster
   object WordCounterMaster {
+    // Can have your cases here
     case class Initialize(nChildren: Int)
     case class WordCountTask(text: String, someWorker: WordCounterWorker)
     case class WordCountReply(/* TODO */ count: Int)
   }
-
-  //ACTOR: WordCounterMaster
+  //------------------------------------------------------------------------------------------
+  //ACTOR: WordCounterMaster. Receives command, federates it to one of the word count workers
   class WordCounterMaster extends Actor {
-    import WordCounterMaster._
+    import WordCounterMaster._ //import the domain to use it
+
+    // Implement the actual actors messaging logic here
     override def receive: Receive = {
-      case Initialize(nChildren) =>
-          println(s"INITIALIZING: $nChildren")
-
-        //[!!!] For loop to create n references for each
-          //Or have it represented as a LIST
-        //Create actorRef of child actor
-        name = s"WCWRef$n" //n is some sort of counter
-        val WCWRef = context.actorOf(Props[WordCounterWorker], name)
-        context.become()
-
-      case WordCountTask(text, someWorker) =>
 
 
       case WordCountReply(count) => ???
     }
   }
 
-  //Possibly need DOMAIN: WordCounterWorker
+  // ITC: Imported from the WordCounterWorker
+  /*Possibly need DOMAIN: WordCounterWorker
   object WordCounterWorker {
     ???
-  }
-
+  }*/
+  //------------------------------------------------------------------------------------------
   //ACTOR: WordCounterWorker
   class WordCounterWorker extends Actor {
+    import WordCounterMaster._
+
     override def receive: Receive = {
-      ???
+      // Delimiter is the " " to enable you to count using the .length method
+      case WordCountTask(text, someWorker) => sender() ! WordCountReply(text.split(" ").length)
     }
   }
 }
